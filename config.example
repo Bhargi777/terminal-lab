@@ -1,0 +1,25 @@
+# terminal-lab personal configuration
+# Copy this file to "config" (gitignored) and fill in your own values.
+#   cp config.example config
+#
+# "config" is never committed. bhargi falls back to these defaults
+# whenever a value is missing.
+
+# Shown in the CLI banner and deets-style summary.
+BHARGI_DISPLAY_NAME="Anonymous"
+
+# Theme name from themes/ (without the .sh extension).
+BHARGI_THEME="default"
+
+# Editor used by commands that open files.
+BHARGI_EDITOR="${EDITOR:-nano}"
+
+# Browser used by commands that open URLs. "default" uses `open`.
+BHARGI_BROWSER="default"
+
+# Directory bhargi looks in first for `mkcd`/project shortcuts.
+BHARGI_PROJECTS_DIR="$HOME/Projects"
+
+# Set to 1 to have new interactive Terminal sessions launch the bhargi menu.
+# Disabled by default; toggled by install.sh, never edited by hand ideally.
+BHARGI_STARTUP_ENABLED=0
