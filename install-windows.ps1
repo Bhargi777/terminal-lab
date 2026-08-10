@@ -42,7 +42,7 @@ foreach ($dep in @("winget", "choco", "python", "py")) {
 
 # Back up existing profile.
 if (Test-Path $PROFILE) {
-    $backup = "$PROFILE.bhargi-backup-$(Get-Date -Format yyyyMMddHHmmss)"
+    $backup = "$PROFILE.termlab-backup-$(Get-Date -Format yyyyMMddHHmmss)"
     Copy-Item $PROFILE $backup
     Write-Host "Backed up $PROFILE -> $backup"
 } else {
@@ -58,7 +58,7 @@ if (-not (Test-Path $configPath)) {
 }
 
 if ($EnableStartup) {
-    (Get-Content $configPath) -replace '^BHARGI_STARTUP_ENABLED=.*', 'BHARGI_STARTUP_ENABLED=1' |
+    (Get-Content $configPath) -replace '^TERMLAB_STARTUP_ENABLED=.*', 'TERMLAB_STARTUP_ENABLED=1' |
         Set-Content $configPath
     Write-Host "Startup integration: ENABLED"
 } else {
@@ -76,5 +76,5 @@ if ($profileContent -match [regex]::Escape($MarkBegin)) {
 
 Write-Host ""
 Write-Host "== Done =="
-Write-Host "Try it now:  . `$PROFILE  ;  bhargi"
+Write-Host "Try it now:  . `$PROFILE  ;  termlab"
 Write-Host "Undo:        ./uninstall-windows.ps1"

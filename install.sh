@@ -7,7 +7,7 @@
 #
 # Usage:
 #   ./install.sh                  install, startup integration OFF
-#   ./install.sh --enable-startup install, and launch bhargi on new shells
+#   ./install.sh --enable-startup install, and launch termlab on new shells
 set -euo pipefail
 
 REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -67,7 +67,7 @@ done
 
 # 6. Back up existing .zshrc
 if [ -f "$ZSHRC" ]; then
-    backup="$ZSHRC.bhargi-backup-$(date +%Y%m%d%H%M%S)"
+    backup="$ZSHRC.termlab-backup-$(date +%Y%m%d%H%M%S)"
     cp "$ZSHRC" "$backup"
     echo "Backed up $ZSHRC -> $backup"
 else
@@ -83,9 +83,9 @@ fi
 
 # 8. Toggle startup integration in the local config
 if [ "$ENABLE_STARTUP" = "1" ]; then
-    sed -i.bak 's/^BHARGI_STARTUP_ENABLED=.*/BHARGI_STARTUP_ENABLED=1/' "$REPO_DIR/config"
+    sed -i.bak 's/^TERMLAB_STARTUP_ENABLED=.*/TERMLAB_STARTUP_ENABLED=1/' "$REPO_DIR/config"
     rm -f "$REPO_DIR/config.bak"
-    echo "Startup integration: ENABLED (bhargi will launch on new interactive shells)"
+    echo "Startup integration: ENABLED (termlab will launch on new interactive shells)"
 else
     echo "Startup integration: disabled (run with --enable-startup to turn it on)"
 fi
@@ -109,5 +109,5 @@ echo "What changed:"
 echo "  - $ZSHRC: appended one marked block (your existing config is untouched above it)"
 echo "  - $REPO_DIR/config: created if missing"
 echo
-echo "Try it now:  source \"$ZSHRC\"  &&  bhargi"
+echo "Try it now:  source \"$ZSHRC\"  &&  termlab"
 echo "Undo:        ./uninstall.sh"

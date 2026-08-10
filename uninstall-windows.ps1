@@ -18,7 +18,7 @@ if (-not ($lines -match [regex]::Escape($MarkBegin))) {
     exit 0
 }
 
-$backup = "$PROFILE.bhargi-backup-$(Get-Date -Format yyyyMMddHHmmss)"
+$backup = "$PROFILE.termlab-backup-$(Get-Date -Format yyyyMMddHHmmss)"
 Copy-Item $PROFILE $backup
 Write-Host "Backed up $PROFILE -> $backup"
 

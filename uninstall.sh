@@ -18,7 +18,7 @@ if ! grep -qF "$MARK_BEGIN" "$ZSHRC"; then
     exit 0
 fi
 
-backup="$ZSHRC.bhargi-backup-$(date +%Y%m%d%H%M%S)"
+backup="$ZSHRC.termlab-backup-$(date +%Y%m%d%H%M%S)"
 cp "$ZSHRC" "$backup"
 echo "Backed up $ZSHRC -> $backup"
 

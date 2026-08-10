@@ -20,8 +20,9 @@ alias home='cd ~'
 alias down='cd ~/Downloads'
 
 # Config
-alias zshrc='${BHARGI_EDITOR:-nano} ~/.zshrc'
+alias zshrc='${TERMLAB_EDITOR:-nano} ~/.zshrc'
 alias reload='source ~/.zshrc'
 
-# Renamed from the old bare "bhargi" alias, which now names the CLI.
+# Points at the author's own GitHub profile — real personal reference,
+# not part of the CLI's neutral branding, so it's not renamed.
 alias ghprofile='open "https://github.com/Bhargi777"'

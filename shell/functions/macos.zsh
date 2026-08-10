@@ -1,7 +1,7 @@
 # macOS audio/visual helper functions, refactored from the personal .zshrc.
 # Fixed from the original: silent failure if osascript is missing.
 
-_bhargi_require_osascript() {
+_termlab_require_osascript() {
     command -v osascript >/dev/null 2>&1 || {
         echo "osascript not found (macOS only)" >&2
         return 1
@@ -9,17 +9,17 @@ _bhargi_require_osascript() {
 }
 
 mute() {
-    _bhargi_require_osascript || return 1
+    _termlab_require_osascript || return 1
     osascript -e 'set volume with output muted'
 }
 
 unmute() {
-    _bhargi_require_osascript || return 1
+    _termlab_require_osascript || return 1
     osascript -e 'set volume without output muted'
 }
 
 vol() {
-    _bhargi_require_osascript || return 1
+    _termlab_require_osascript || return 1
     if [ -z "$1" ]; then
         echo "Usage: vol <0-100>" >&2
         return 1
@@ -38,7 +38,7 @@ cma() {
 
 # Applies the neon Terminal.app color scheme to the current tab.
 neon() {
-    _bhargi_require_osascript || return 1
+    _termlab_require_osascript || return 1
     osascript <<'EOF'
 tell application "Terminal"
     tell selected tab of front window
