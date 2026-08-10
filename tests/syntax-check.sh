@@ -35,6 +35,16 @@ check "install.sh" bash
 check "uninstall.sh" bash
 
 echo
+if command -v pwsh >/dev/null 2>&1; then
+    echo "== PowerShell syntax (.ps1 files, Windows CLI) =="
+    if ! pwsh -NoProfile -File "$REPO_DIR/tests/windows-syntax-check.ps1"; then
+        fail=1
+    fi
+else
+    echo "pwsh not installed — skipping PowerShell syntax check (see tests/windows-syntax-check.ps1, runs in CI on windows-latest)."
+fi
+
+echo
 if command -v shellcheck >/dev/null 2>&1; then
     echo "== shellcheck (optional, informational only) =="
     find . \( -name '*.sh' -o -name '*.zsh' \) -not -path './.git/*' -print0 \
