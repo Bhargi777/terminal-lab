@@ -21,6 +21,7 @@ theme_file="$BHARGI_HOME/themes/${BHARGI_THEME:-default}.zsh"
 [ -f "$theme_file" ] || theme_file="$BHARGI_HOME/themes/default.zsh"
 source "$theme_file"
 
+source "$BHARGI_HOME/cli/lib/platform.zsh"
 source "$BHARGI_HOME/cli/lib/menu.zsh"
 source "$BHARGI_HOME/cli/lib/modules.zsh"
 
@@ -36,6 +37,9 @@ main() {
             ;;
         T|t|terminal|Terminal)
             bhargi_go_to_terminal
+            ;;
+        platform)
+            bhargi_platform_summary
             ;;
         *)
             bhargi_dispatch "$@"
