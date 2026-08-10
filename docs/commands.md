@@ -1,16 +1,24 @@
 # Command reference
 
 Run `bhargi <module> --help` for any module's own help text; this is a
-summary.
+summary. On macOS/Linux/WSL this is `bhargi`; on Windows it's
+`./bhargi.ps1` from `cli/windows/` (or just `bhargi` once profile
+integration is installed) — see [cross-platform.md](cross-platform.md).
+
+## platform
+
+| Command | Description |
+|---|---|
+| `bhargi platform` | detected OS/distro/architecture |
 
 ## system
 
 | Command | Description |
 |---|---|
-| `bhargi system` / `system info` | macOS version, kernel, model, CPU, memory summary |
-| `bhargi system battery` | battery charge/health via `pmset` |
-| `bhargi system memory` | memory breakdown via `vm_stat` |
-| `bhargi system disk` | disk usage via `df` |
+| `bhargi system` / `system info` | OS version, kernel, model, CPU, memory summary (macOS/Linux branch automatically; native cmdlets on Windows) |
+| `bhargi system battery` | battery charge/health |
+| `bhargi system memory` | memory breakdown |
+| `bhargi system disk` | disk usage |
 | `bhargi system uptime` | system uptime |
 
 ## network
@@ -61,7 +69,19 @@ summary.
 | `bhargi python packages` | list installed packages |
 | `bhargi python project <name>` | scaffold a new project directory |
 
-## homebrew
+## packages (cross-platform)
+
+Detects whichever package manager is actually installed: brew, apt, dnf,
+yum, pacman, zypper (POSIX side); winget, choco (Windows side).
+
+| Command | Description |
+|---|---|
+| `bhargi packages` / `packages info` | detected manager + version |
+| `bhargi packages list` | installed packages |
+| `bhargi packages outdated` | packages with available updates |
+| `bhargi packages upgrade` | upgrade outdated packages (confirmation required) |
+
+## homebrew (macOS-specific)
 
 | Command | Description |
 |---|---|
@@ -82,6 +102,29 @@ summary.
 | `bhargi macos notify <msg> [title]` | macOS notification |
 | `bhargi macos say <text>` | text-to-speech |
 | `bhargi macos settings` | open System Settings |
+
+## linux
+
+| Command | Description |
+|---|---|
+| `bhargi linux lock` | lock session (`loginctl`/`xdg-screensaver`) |
+| `bhargi linux volume [0-100]` | get/set volume (`pactl`/`amixer`) |
+| `bhargi linux mute` / `unmute` | mute/unmute default sink |
+| `bhargi linux open <app\|url>` | open via `xdg-open` |
+| `bhargi linux notify <msg> [title]` | desktop notification (`notify-send`) |
+| `bhargi linux say <text>` | text-to-speech (`spd-say`/`espeak`) |
+
+## windows (PowerShell CLI only)
+
+| Command | Description |
+|---|---|
+| `bhargi windows lock` | lock the workstation |
+| `bhargi windows mute` | toggle mute (media-key emulation) |
+| `bhargi windows volume up\|down` | step volume (no absolute-level setter — see [cross-platform.md](cross-platform.md)) |
+| `bhargi windows open <app\|url>` | `Start-Process` wrapper |
+| `bhargi windows notify <msg> [title]` | toast (BurntToast) or `msg.exe` fallback |
+| `bhargi windows say <text>` | text-to-speech (`System.Speech`) |
+| `bhargi windows settings` | open Windows Settings |
 
 ## utilities
 

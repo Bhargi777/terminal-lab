@@ -3,18 +3,29 @@
 ## Layers
 
 ```
-cli/bhargi              thin dispatcher: parses argv[0], loads theme/config,
-                         hands off to a module script or the menu
-cli/lib/modules.zsh      module registry + exec-based dispatch
-cli/lib/menu.zsh         interactive menu rendering + input loop
-commands/<name>/*.zsh    one self-contained module per domain
-shell/                   zsh integration sourced by .zshrc (aliases,
-                         functions, prompt, config loader)
-themes/                  color variable sets, selected via config
-experiments/             standalone scripts, one concept each, never
-                         imported by the CLI
-learning/                notes, not code
+cli/bhargi               zsh dispatcher (macOS/Linux/WSL): parses argv[0],
+                          loads theme/config/platform, hands off to a
+                          module script or the menu
+cli/lib/platform.zsh      OS detection (macos/linux/wsl/unknown)
+cli/lib/modules.zsh       module registry + exec-based dispatch
+cli/lib/menu.zsh          interactive menu, platform-aware item 9
+cli/windows/bhargi.ps1    PowerShell dispatcher (native Windows), same
+                          command vocabulary, independent implementation
+cli/windows/lib/*.ps1     Windows platform detection + module dispatch
+commands/<name>/*.zsh     zsh module implementation (macOS/Linux/WSL)
+commands/<name>/*.ps1     PowerShell module implementation (Windows),
+                          where one exists for that module
+shell/zsh/, shell/windows/  per-OS startup integration, sourced by
+                          .zshrc / $PROFILE respectively
+shell/aliases/, functions/, prompt/  zsh-only personal shell layer
+themes/                   color variable sets, selected via config
+experiments/              standalone scripts, one concept each, never
+                          imported by the CLI
+learning/                 notes, not code
 ```
+
+See [cross-platform.md](cross-platform.md) for how the two CLI
+implementations relate to each other and what's shared vs platform-only.
 
 ## Module contract
 
@@ -47,10 +58,15 @@ integration on.
 ## Cross-platform seam
 
 All macOS-specific calls (`sw_vers`, `system_profiler`, `sysctl`, `pmset`,
-`osascript`) are confined to `commands/*/*.zsh` and `shell/functions/macos.zsh`.
-A future Linux or Windows implementation only needs equivalent scripts at
-the same paths — the dispatcher, menu, and config system are already
-platform-neutral shell/zsh.
+`osascript`) are confined to the `mac_*` functions inside `commands/system/system.zsh`
+and `commands/processes/processes.zsh`, plus `commands/macos/macos.zsh` and
+`shell/functions/macos.zsh` entirely. Linux equivalents live alongside
+them as `linux_*` functions in the same files (branching on
+`$BHARGI_PLATFORM`, set by `cli/lib/platform.zsh`) or as the sibling
+`commands/linux/linux.zsh` module. Windows has no zsh runtime at all, so
+it gets a fully separate PowerShell tree (`cli/windows/`, `commands/*/*.ps1`)
+rather than a branch inside the same file — see
+[cross-platform.md](cross-platform.md).
 
 ## Configuration
 

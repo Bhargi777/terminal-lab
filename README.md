@@ -1,8 +1,9 @@
 # terminal-lab
 
-A personal terminal laboratory: a CLI toolkit for macOS built while learning
-Unix, shell scripting, networking, Git, Python, and CLI architecture. It is
-both a usable tool (`bhargi`) and a record of what was learned building it.
+A personal terminal laboratory: a cross-platform CLI toolkit (macOS,
+Linux/WSL, Windows) built while learning Unix, shell scripting,
+networking, Git, Python, and CLI architecture. It is both a usable tool
+(`bhargi`) and a record of what was learned building it.
 
 ## Why
 
@@ -17,28 +18,38 @@ LEARN -> EXPERIMENT -> BUILD -> DOCUMENT -> TEST -> COMMIT
 
 ## What's here
 
-- `cli/` - the `bhargi` command entrypoint and interactive menu
+- `cli/` - the `bhargi` command entrypoint and interactive menu (zsh:
+  macOS/Linux/WSL); `cli/windows/` - the native PowerShell counterpart
 - `commands/` - one module per domain (system, network, filesystem,
-  processes, git, python, homebrew, macos, utilities)
-- `shell/` - zsh aliases, functions, and prompt integration, refactored out
-  of a personal `.zshrc`
+  processes, git, python, packages, homebrew, macos, linux, windows,
+  utilities), as `.zsh` and/or `.ps1` per module
+- `shell/zsh/`, `shell/windows/` - per-OS startup integration;
+  `shell/aliases/`, `shell/functions/`, `shell/prompt/` - zsh personal
+  layer refactored out of a personal `.zshrc`
 - `themes/` - terminal color/theme definitions
 - `experiments/` - small, safe, isolated scripts exploring one concept each
 - `learning/` - notes on what was tried and what it taught
-- `docs/` - architecture, command reference, install guide, roadmap
-- `tests/` - syntax and smoke checks
-- `install.sh` / `uninstall.sh` - opt-in installer with backups
+- `docs/` - architecture, cross-platform design, command reference,
+  install guide, roadmap
+- `tests/` - syntax, smoke, and platform-detection checks (POSIX + PowerShell)
+- `install.sh` / `uninstall.sh` (macOS/Linux) and `install-windows.ps1` /
+  `uninstall-windows.ps1` (Windows) - opt-in installers with backups
 
 ## Install
 
-See [docs/installation.md](docs/installation.md). Short version:
+See [docs/installation.md](docs/installation.md) for full OS-by-OS steps.
+Short version:
 
 ```sh
-./install.sh
+./install.sh              # macOS / Linux
 ```
 
-The installer backs up your existing `.zshrc`, never overwrites it silently,
-and only adds shell startup integration if you opt in.
+```powershell
+./install-windows.ps1     # Windows
+```
+
+Both back up your existing shell config before touching it, never
+overwrite it silently, and only add startup integration if you opt in.
 
 ## Usage
 
@@ -55,14 +66,16 @@ See [docs/commands.md](docs/commands.md) for the full command reference.
 
 ## Architecture
 
-`bhargi` is a thin dispatcher (`cli/bhargi`) that sources one script per
-module from `commands/<module>/`. Each module is plain POSIX-ish zsh, no
-framework, no external runtime dependency beyond native macOS tools
-(`sw_vers`, `system_profiler`, `sysctl`, `pmset`, `ps`, `lsof`, ...) and
-things already on the system (`git`, `python3`, `brew` when present).
-Platform-specific code lives behind a single `commands/*/macos.sh`-style
-seam so Linux/Windows implementations can be added later without touching
-the dispatcher. Details in [docs/architecture.md](docs/architecture.md).
+`bhargi` is a thin dispatcher (`cli/bhargi` on macOS/Linux/WSL,
+`cli/windows/bhargi.ps1` on Windows) that hands off to one script per
+module from `commands/<module>/`. No framework, no external runtime
+dependency beyond native OS tools (`sw_vers`/`sysctl`/`pmset` on macOS,
+`/proc`+`ip`/`ss` on Linux, `Get-CimInstance`/`Get-NetTCPConnection` on
+Windows) and things already on the system (`git`, `python3`, a package
+manager when present). Platform detection (`cli/lib/platform.zsh` /
+`Get-BhargiPlatform`) picks the right branch or module at dispatch time.
+Details in [docs/architecture.md](docs/architecture.md) and
+[docs/cross-platform.md](docs/cross-platform.md).
 
 ## Safety
 
