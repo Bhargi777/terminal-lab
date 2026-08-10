@@ -3,7 +3,7 @@
 ## Milestone 1 — Foundation (this release)
 
 - [x] Repository structure
-- [x] `bhargi` CLI dispatcher + interactive menu
+- [x] `termlab` CLI dispatcher + interactive menu
 - [x] System, network, filesystem, process modules
 - [x] Git, Python, Homebrew, macOS automation modules
 - [x] Terminal UI experiments
@@ -14,17 +14,17 @@
 ## Milestone 2 — Depth
 
 - [ ] Config-driven theme switching in the live menu
-- [ ] `bhargi files search` with fd-like filters
-- [ ] `bhargi network http` request inspector
-- [ ] Process tree view (`bhargi processes tree`)
+- [ ] `termlab files search` with fd-like filters
+- [ ] `termlab network http` request inspector
+- [ ] Process tree view (`termlab processes tree`)
 - [ ] More learning notes as new topics come up
 
 ## Milestone 3 — Portability (this release)
 
-- [x] Platform detection module (`cli/lib/platform.zsh`, `bhargi platform`)
+- [x] Platform detection module (`cli/lib/platform.zsh`, `termlab platform`)
 - [x] Linux implementation of system/network/process modules (branched
       internally, not a separate copy)
-- [x] Native Windows PowerShell CLI (`cli/windows/bhargi.ps1`) with core
+- [x] Native Windows PowerShell CLI (`cli/windows/termlab.ps1`) with core
       modules: system, network, filesystem, processes, git, python,
       packages, windows automation, utilities
 - [x] Cross-platform package manager module (brew/apt/dnf/pacman/zypper/
@@ -42,7 +42,7 @@
 ## Milestone 4 — Polish
 
 - [ ] Man page / `--help` generated from module metadata
-- [ ] Homebrew tap for `brew install bhargi`
+- [ ] Homebrew tap for `brew install termlab`
 - [ ] winget/choco package manifest for the Windows CLI
 - [ ] Plugin mechanism for personal one-off commands outside the repo
 

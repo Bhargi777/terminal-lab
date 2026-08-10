@@ -11,8 +11,8 @@ zsh doesn't run natively on Windows. Rather than force Windows users
 through WSL just to get the CLI, or write everything in a lowest-common-
 denominator language, terminal-lab has:
 
-- `cli/bhargi` (zsh) — macOS, Linux, WSL
-- `cli/windows/bhargi.ps1` (PowerShell) — native Windows
+- `cli/termlab` (zsh) — macOS, Linux, WSL
+- `cli/windows/termlab.ps1` (PowerShell) — native Windows
 
 Both read the same `commands/<name>/` directory structure. A module
 provides a `.zsh` file, a `.ps1` file, or both, depending on whether its
@@ -30,17 +30,17 @@ behavior is truly platform-specific.
 
 Within the zsh side, `commands/system/system.zsh`,
 `commands/network/network.zsh`, and `commands/processes/processes.zsh`
-further branch internally by `$BHARGI_PLATFORM` (macOS vs Linux/WSL)
+further branch internally by `$TERMLAB_PLATFORM` (macOS vs Linux/WSL)
 because the underlying tools genuinely differ — see
 [architecture.md](architecture.md) for the module contract these branches
 follow.
 
 ## Platform detection
 
-- POSIX side: `cli/lib/platform.zsh`'s `bhargi_detect_platform` reads
+- POSIX side: `cli/lib/platform.zsh`'s `termlab_detect_platform` reads
   `uname -s`, plus `/proc/version` and `$WSL_DISTRO_NAME` to tell WSL
-  apart from real Linux. Exposed as `bhargi platform`.
-- Windows side: `cli/windows/lib/Modules.ps1`'s `Get-BhargiPlatform`
+  apart from real Linux. Exposed as `termlab platform`.
+- Windows side: `cli/windows/lib/Modules.ps1`'s `Get-TermlabPlatform`
   reports OS version, architecture, PowerShell version, whether WSL is
   installed, and whether the session is running inside Windows Terminal.
 
@@ -64,13 +64,13 @@ three menus so muscle memory transfers.
 - **Windows volume control has no absolute-level setter.** Unlike
   macOS (`osascript ... output volume`) and Linux (`pactl`/`amixer`),
   Windows has no built-in cmdlet for setting an exact volume percentage.
-  `bhargi windows volume` emulates media-key presses (mute/step up/down)
+  `termlab windows volume` emulates media-key presses (mute/step up/down)
   instead of faking a feature that isn't really there. Setting an exact
   level needs the optional `AudioDeviceCmdlets` module — not bundled, to
   keep dependencies minimal.
 - **Windows notifications** prefer the optional `BurntToast` module and
   fall back to `msg.exe` (not present on all Windows editions); if
-  neither exists, `bhargi windows notify` says so instead of pretending.
+  neither exists, `termlab windows notify` says so instead of pretending.
 - **The Windows CLI is untested against a real PowerShell runtime in
   this development environment** (no `pwsh` available here). It's
   parse-checked (`tests/windows-syntax-check.ps1`) and reviewed

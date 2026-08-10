@@ -28,7 +28,7 @@ A `.venv` directory existing on disk says nothing about whether it's
 
 ## What I learned
 
-`bhargi python info` checks `$VIRTUAL_ENV` first (active), then falls back
+`termlab python info` checks `$VIRTUAL_ENV` first (active), then falls back
 to checking for a `.venv` directory (present but inactive), rather than
 assuming one implies the other.
 

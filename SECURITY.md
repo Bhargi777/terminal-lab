@@ -20,11 +20,11 @@ maintainer directly rather than filing a public issue.
 - `install.sh`/`uninstall.sh` only ever append to or remove a single
   clearly marked block in `~/.zshrc`; they never overwrite it and always
   back it up first.
-- Network calls are limited to explicit user-invoked commands (`bhargi
+- Network calls are limited to explicit user-invoked commands (`termlab
   network ip`, `http`, `ping`, `dns`) — nothing phones home on its own.
 
 ## Known limitations
 
 - Shell scripts trust their own arguments; this project is a personal CLI,
   not a hardened multi-user tool. Don't run it as root, and don't pipe
-  untrusted input into `bhargi network http` or similar commands.
+  untrusted input into `termlab network http` or similar commands.

@@ -3,7 +3,7 @@
 A personal terminal laboratory: a cross-platform CLI toolkit (macOS,
 Linux/WSL, Windows) built while learning Unix, shell scripting,
 networking, Git, Python, and CLI architecture. It is both a usable tool
-(`bhargi`) and a record of what was learned building it.
+(`termlab`) and a record of what was learned building it.
 
 ## Why
 
@@ -18,7 +18,7 @@ LEARN -> EXPERIMENT -> BUILD -> DOCUMENT -> TEST -> COMMIT
 
 ## What's here
 
-- `cli/` - the `bhargi` command entrypoint and interactive menu (zsh:
+- `cli/` - the `termlab` command entrypoint and interactive menu (zsh:
   macOS/Linux/WSL); `cli/windows/` - the native PowerShell counterpart
 - `commands/` - one module per domain (system, network, filesystem,
   processes, git, python, packages, homebrew, macos, linux, windows,
@@ -54,11 +54,11 @@ overwrite it silently, and only add startup integration if you opt in.
 ## Usage
 
 ```sh
-bhargi            # interactive command center
-bhargi system     # system info
-bhargi network    # network diagnostics
-bhargi git status # git helpers
-bhargi --help     # full command list
+termlab            # interactive command center
+termlab system     # system info
+termlab network    # network diagnostics
+termlab git status # git helpers
+termlab --help     # full command list
 ```
 
 Press `T` in the menu to drop straight into a normal shell. Press `Q` to quit.
@@ -66,16 +66,18 @@ See [docs/commands.md](docs/commands.md) for the full command reference.
 
 ## Architecture
 
-`bhargi` is a thin dispatcher (`cli/bhargi` on macOS/Linux/WSL,
-`cli/windows/bhargi.ps1` on Windows) that hands off to one script per
+`termlab` is a thin dispatcher (`cli/termlab` on macOS/Linux/WSL,
+`cli/windows/termlab.ps1` on Windows) that hands off to one script per
 module from `commands/<module>/`. No framework, no external runtime
 dependency beyond native OS tools (`sw_vers`/`sysctl`/`pmset` on macOS,
 `/proc`+`ip`/`ss` on Linux, `Get-CimInstance`/`Get-NetTCPConnection` on
 Windows) and things already on the system (`git`, `python3`, a package
 manager when present). Platform detection (`cli/lib/platform.zsh` /
-`Get-BhargiPlatform`) picks the right branch or module at dispatch time.
+`Get-TermlabPlatform`) picks the right branch or module at dispatch time.
 Details in [docs/architecture.md](docs/architecture.md) and
-[docs/cross-platform.md](docs/cross-platform.md).
+[docs/cross-platform.md](docs/cross-platform.md). Honest per-OS support
+levels (Supported/Partial/Experimental — nothing claimed that hasn't
+actually been run and checked) are in [docs/platforms.md](docs/platforms.md).
 
 ## Safety
 

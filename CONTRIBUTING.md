@@ -22,7 +22,7 @@ platforms.
 
 1. `mkdir commands/<name>` and add `commands/<name>/<name>.zsh` (own
    shebang, `chmod +x`, a `case` over `${1:-default}`, its own `--help`).
-2. Add `<name>` to `BHARGI_MODULES` in `cli/lib/modules.zsh`.
+2. Add `<name>` to `TERMLAB_MODULES` in `cli/lib/modules.zsh`.
 3. Add a menu entry in `cli/lib/menu.zsh` if it should be reachable from
    the interactive UI.
 4. Document it in `docs/commands.md`.

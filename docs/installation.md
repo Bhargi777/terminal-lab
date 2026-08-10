@@ -26,7 +26,7 @@ cd terminal-lab
 This will:
 
 1. Verify macOS, zsh, git are present and report on optional dependencies.
-2. Back up your existing `~/.zshrc` to `~/.zshrc.bhargi-backup-<timestamp>`.
+2. Back up your existing `~/.zshrc` to `~/.zshrc.termlab-backup-<timestamp>`.
 3. Create `config` from `config.example` if it doesn't exist yet.
 4. Append one clearly marked, idempotent block to `~/.zshrc` that sources
    `shell/zsh/init.zsh`. Nothing above that block is touched.
@@ -41,7 +41,7 @@ Then reload your shell:
 
 ```sh
 source ~/.zshrc
-bhargi
+termlab
 ```
 
 ### Uninstall
@@ -88,8 +88,8 @@ shells; `./uninstall.sh` to remove the integration.
 - git for Windows
 
 Windows uses a **separate, native implementation**
-(`cli/windows/bhargi.ps1`), not the zsh CLI through WSL, so no WSL
-installation is required. If you do have WSL, `bhargi platform` (the zsh
+(`cli/windows/termlab.ps1`), not the zsh CLI through WSL, so no WSL
+installation is required. If you do have WSL, `termlab platform` (the zsh
 version, run inside WSL) reports it as `wsl`, and the Linux install steps
 above apply inside that WSL distro.
 
@@ -105,7 +105,7 @@ This will:
 
 1. Report the PowerShell version and check for `git`, `winget`, `choco`,
    `python`/`py`.
-2. Back up your existing `$PROFILE` to `$PROFILE.bhargi-backup-<timestamp>`.
+2. Back up your existing `$PROFILE` to `$PROFILE.termlab-backup-<timestamp>`.
 3. Create `config` from `config.example` if it doesn't exist yet.
 4. Append one clearly marked, idempotent block to `$PROFILE` that
    dot-sources `shell/windows/init.ps1`.
@@ -120,7 +120,7 @@ Then reload your profile:
 
 ```powershell
 . $PROFILE
-bhargi
+termlab
 ```
 
 ### Uninstall
@@ -133,16 +133,16 @@ Removes only the marked block from `$PROFILE`, with its own backup first.
 
 ### Windows Terminal
 
-No special configuration is required — `bhargi.ps1` and the profile
+No special configuration is required — `termlab.ps1` and the profile
 integration work in both Windows Terminal and the legacy `conhost`
-console. `Get-BhargiPlatform` reports whether the current session is
+console. `Get-TermlabPlatform` reports whether the current session is
 running inside Windows Terminal (`$env:WT_SESSION`), shown in the
 interactive menu header.
 
 ## Configuration (all platforms)
 
 Edit `config` (gitignored) to set your display name, theme, editor,
-browser, and projects directory, and to toggle `BHARGI_STARTUP_ENABLED` —
+browser, and projects directory, and to toggle `TERMLAB_STARTUP_ENABLED` —
 see `config.example` for the full list. The file format is identical on
 every OS; both `shell/functions/config.zsh` and `commands/utilities/utilities.ps1`
 / `shell/windows/init.ps1` read the same `KEY=value` lines.
@@ -154,9 +154,9 @@ every OS; both `shell/functions/config.zsh` and `commands/utilities/utilities.ps
 | Hook file | `~/.zshrc` | `$PROFILE` |
 | Marked block sourced | `shell/zsh/init.zsh` | `shell/windows/init.ps1` |
 | Enable | `./install.sh --enable-startup` | `./install-windows.ps1 -EnableStartup` |
-| Disable (keep installed) | set `BHARGI_STARTUP_ENABLED=0` in `config` | same — `config` is shared |
+| Disable (keep installed) | set `TERMLAB_STARTUP_ENABLED=0` in `config` | same — `config` is shared |
 | Remove entirely | `./uninstall.sh` | `./uninstall-windows.ps1` |
-| Recursion guard | `$BHARGI_ACTIVE` (zsh env var) | `$env:BHARGI_ACTIVE` |
+| Recursion guard | `$TERMLAB_ACTIVE` (zsh env var) | `$env:TERMLAB_ACTIVE` |
 
 On every platform, startup integration is opt-in, guarded against
 relaunching itself, and reversible without touching anything outside the

@@ -27,7 +27,7 @@ first byte after the handshake finished).
 
 ## What I learned
 
-`bhargi network http` reports `time_total` and status code, which is
+`termlab network http` reports `time_total` and status code, which is
 enough for a quick health check, but a real latency investigation needs
 the full breakdown to tell "slow DNS" apart from "slow server."
 

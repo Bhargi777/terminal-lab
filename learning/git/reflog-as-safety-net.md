@@ -28,7 +28,7 @@ SHA brought the full history back.
 
 ## What I learned
 
-`bhargi git cleanup` in this repo deliberately never runs `git reset --hard`
+`termlab git cleanup` in this repo deliberately never runs `git reset --hard`
 or `git clean -fd` itself — it only prints what *would* be affected — but
 this experiment is why that caution is more about avoiding surprise than
 avoiding true data loss: local reflog entries expire (default 90 days for

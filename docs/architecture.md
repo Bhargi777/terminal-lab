@@ -3,13 +3,13 @@
 ## Layers
 
 ```
-cli/bhargi               zsh dispatcher (macOS/Linux/WSL): parses argv[0],
+cli/termlab               zsh dispatcher (macOS/Linux/WSL): parses argv[0],
                           loads theme/config/platform, hands off to a
                           module script or the menu
 cli/lib/platform.zsh      OS detection (macos/linux/wsl/unknown)
 cli/lib/modules.zsh       module registry + exec-based dispatch
 cli/lib/menu.zsh          interactive menu, platform-aware item 9
-cli/windows/bhargi.ps1    PowerShell dispatcher (native Windows), same
+cli/windows/termlab.ps1    PowerShell dispatcher (native Windows), same
                           command vocabulary, independent implementation
 cli/windows/lib/*.ps1     Windows platform detection + module dispatch
 commands/<name>/*.zsh     zsh module implementation (macOS/Linux/WSL)
@@ -40,16 +40,16 @@ executable (`chmod +x`, its own shebang), and:
 
 `cli/lib/modules.zsh` knows only the module *name* — it execs
 `commands/<name>/<name>.zsh "$@"` and nothing else, so a new module is a
-new directory plus one line added to `BHARGI_MODULES`, not a change to the
+new directory plus one line added to `TERMLAB_MODULES`, not a change to the
 dispatcher.
 
 ## Startup integration and the recursion guard
 
 `install.sh` can append a single sourcing line to `~/.zshrc` that loads
-`shell/zsh/init.zsh`. That file optionally launches `bhargi` on new
-interactive shells, gated by `BHARGI_STARTUP_ENABLED` in `config`.
+`shell/zsh/init.zsh`. That file optionally launches `termlab` on new
+interactive shells, gated by `TERMLAB_STARTUP_ENABLED` in `config`.
 
-Recursion is prevented by `BHARGI_ACTIVE`: `cli/bhargi` exports it on
+Recursion is prevented by `TERMLAB_ACTIVE`: `cli/termlab` exports it on
 start, and the startup hook checks it's unset before auto-launching.
 Choosing `T` (Terminal) in the menu unsets it before `exec`ing a fresh
 shell, so that fresh shell won't relaunch the menu even with startup
@@ -62,11 +62,12 @@ All macOS-specific calls (`sw_vers`, `system_profiler`, `sysctl`, `pmset`,
 and `commands/processes/processes.zsh`, plus `commands/macos/macos.zsh` and
 `shell/functions/macos.zsh` entirely. Linux equivalents live alongside
 them as `linux_*` functions in the same files (branching on
-`$BHARGI_PLATFORM`, set by `cli/lib/platform.zsh`) or as the sibling
+`$TERMLAB_PLATFORM`, set by `cli/lib/platform.zsh`) or as the sibling
 `commands/linux/linux.zsh` module. Windows has no zsh runtime at all, so
 it gets a fully separate PowerShell tree (`cli/windows/`, `commands/*/*.ps1`)
 rather than a branch inside the same file — see
-[cross-platform.md](cross-platform.md).
+[cross-platform.md](cross-platform.md) and [platforms.md](platforms.md)
+for the honest per-OS support matrix.
 
 ## Configuration
 
