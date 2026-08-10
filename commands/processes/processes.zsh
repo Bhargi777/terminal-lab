@@ -8,18 +8,21 @@ set -o pipefail
 cmd_top() {
     local n="${1:-10}"
     echo "Top $n processes by CPU:"
-    ps -Ao pid,ppid,pcpu,pmem,comm -r | head -n $((n + 1))
+    # head closes the pipe early, which sends ps a SIGPIPE (exit 141);
+    # that's expected truncation, not a real failure, so pipefail is
+    # suspended just for this pipeline.
+    ( set +o pipefail; ps -Ao pid,ppid,pcpu,pmem,comm -r | head -n $((n + 1)) )
 }
 
 cmd_mem() {
     local n="${1:-10}"
     echo "Top $n processes by memory:"
-    ps -Ao pid,ppid,pcpu,pmem,comm -m | head -n $((n + 1))
+    ( set +o pipefail; ps -Ao pid,ppid,pcpu,pmem,comm -m | head -n $((n + 1)) )
 }
 
 cmd_ports() {
     echo "Processes with open network connections:"
-    lsof -iTCP -iUDP -n -P 2>/dev/null | head -n 40
+    ( set +o pipefail; lsof -iTCP -iUDP -n -P 2>/dev/null | head -n 40 )
 }
 
 cmd_kill() {
