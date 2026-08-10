@@ -2,7 +2,7 @@
 # Each module is a standalone executable at commands/<name>/<name>.zsh
 # that takes its own subcommands and prints help with no arguments.
 
-typeset -ga BHARGI_MODULES=(system network filesystem processes git python homebrew macos utilities)
+typeset -ga BHARGI_MODULES=(system network filesystem processes git python packages homebrew macos linux utilities)
 
 bhargi_module_path() {
     echo "$BHARGI_HOME/commands/$1/$1.zsh"
@@ -29,6 +29,7 @@ bhargi — personal terminal command center
 Usage:
   bhargi                launch the interactive menu
   bhargi <module> [...] run a module directly
+  bhargi platform        show detected OS/platform
   bhargi T               drop into a normal shell
   bhargi --help          show this help
 

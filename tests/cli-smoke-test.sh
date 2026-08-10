@@ -23,7 +23,7 @@ echo "== bhargi CLI smoke test =="
 run "bhargi --help"          "$BHARGI" --help
 run "bhargi unknown-module"  bash -c "! $BHARGI not-a-real-module"
 
-for mod in system network filesystem processes git python homebrew macos utilities; do
+for mod in system network filesystem processes git python homebrew macos linux packages utilities; do
     run "bhargi $mod" "$BHARGI" "$mod"
 done
 
