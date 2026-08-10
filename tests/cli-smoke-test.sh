@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Smoke test: exercise cli/bhargi's non-interactive paths (help, and each
+# Smoke test: exercise cli/termlab's non-interactive paths (help, and each
 # module's --help) to catch broken dispatch or a module script with a
 # syntax/runtime error just from being invoked. Not a full test suite —
 # a fast "did I break the wiring" check.
@@ -12,7 +12,7 @@
 set -uo pipefail
 
 REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-BHARGI="$REPO_DIR/cli/bhargi"
+TERMLAB="$REPO_DIR/cli/termlab"
 fail=0
 
 run() {
@@ -25,13 +25,23 @@ run() {
     fi
 }
 
-echo "== bhargi CLI smoke test =="
-run "bhargi --help"          "$BHARGI" --help
-run "bhargi platform"        "$BHARGI" platform
-run "bhargi unknown-module"  bash -c "! $BHARGI not-a-real-module"
+echo "== termlab CLI smoke test =="
+run "termlab --help"          "$TERMLAB" --help
+run "termlab platform"        "$TERMLAB" platform
+run "termlab unknown-module"  bash -c "! $TERMLAB not-a-real-module"
 
 for mod in system network filesystem processes git python homebrew macos linux packages utilities; do
-    run "bhargi $mod --help" "$BHARGI" "$mod" --help
+    run "termlab $mod --help" "$TERMLAB" "$mod" --help
 done
+
+echo
+echo "== deprecated bhargi shim =="
+run "bhargi --help still works" "$REPO_DIR/cli/bhargi" --help
+if "$REPO_DIR/cli/bhargi" --help 2>&1 >/dev/null | grep -q "deprecated"; then
+    echo "  ok    bhargi prints a deprecation warning"
+else
+    echo "  FAIL  bhargi did not print a deprecation warning"
+    fail=1
+fi
 
 exit $fail

@@ -20,10 +20,11 @@ check() {
     fi
 }
 
-echo "== zsh syntax (.zsh files, cli/bhargi, commands/*/*.zsh) =="
+echo "== zsh syntax (.zsh files, cli/termlab, cli/bhargi, commands/*/*.zsh) =="
 while IFS= read -r -d '' f; do
     check "$f" zsh
 done < <(find . -name '*.zsh' -not -path './.git/*' -print0)
+check "cli/termlab" zsh
 check "cli/bhargi" zsh
 
 echo

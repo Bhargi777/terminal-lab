@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 # Validates cli/lib/platform.zsh's detection against the OS actually
-# running the test, and checks the menu/dispatch machinery agrees.
+# running the test, checks the menu/dispatch machinery agrees, and
+# checks the capability layer returns one of the three defined states
+# for every registered capability (never something ad hoc).
 set -euo pipefail
 
 REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
@@ -18,7 +20,7 @@ case "$(uname -s)" in
         ;;
 esac
 
-detected="$(zsh -c "source '$REPO_DIR/cli/lib/platform.zsh'; bhargi_detect_platform")"
+detected="$(zsh -c "source '$REPO_DIR/cli/lib/platform.zsh'; termlab_detect_platform")"
 
 echo "== platform detection =="
 if [ "$detected" = "$expected" ]; then
@@ -29,24 +31,42 @@ else
 fi
 
 echo
-echo "== bhargi platform command =="
-output="$("$REPO_DIR/cli/bhargi" platform)"
-if echo "$output" | grep -q "^Platform :"; then
-    echo "  ok    bhargi platform prints a Platform line"
-    echo "        $output"
+echo "== termlab platform command =="
+output="$("$REPO_DIR/cli/termlab" platform)"
+if echo "$output" | grep -q "^Platform$" && echo "$output" | grep -q "^OS "; then
+    echo "  ok    termlab platform prints OS/Version/Architecture/Shell/Environment"
 else
-    echo "  FAIL  bhargi platform did not print the expected format"
+    echo "  FAIL  termlab platform did not print the expected format"
     echo "        got: $output"
+    fail=1
+fi
+
+echo
+echo "== capability detection =="
+cap_output="$(zsh -c "
+    TERMLAB_HOME='$REPO_DIR'
+    source '$REPO_DIR/cli/lib/platform.zsh'
+    source '$REPO_DIR/cli/lib/capabilities.zsh'
+    for cap in \"\${TERMLAB_CAPABILITIES[@]}\"; do
+        termlab_capability_status \"\$cap\"
+    done
+")"
+bad_states="$(echo "$cap_output" | grep -Ev '^(supported|unavailable|unsupported)$' || true)"
+if [ -z "$bad_states" ] && [ "$(echo "$cap_output" | wc -l | tr -d ' ')" = "9" ]; then
+    echo "  ok    all 9 capabilities report supported/unavailable/unsupported"
+else
+    echo "  FAIL  unexpected capability status output:"
+    echo "$cap_output" | sed 's/^/        /'
     fail=1
 fi
 
 echo
 echo "== OS-appropriate automation module selected =="
 menu_module="$(zsh -c "
-    BHARGI_HOME='$REPO_DIR'
+    TERMLAB_HOME='$REPO_DIR'
     source '$REPO_DIR/cli/lib/platform.zsh'
     source '$REPO_DIR/cli/lib/menu.zsh'
-    bhargi_menu_os_module
+    termlab_menu_os_module
 ")"
 case "$expected" in
     macos) want=macos ;;
