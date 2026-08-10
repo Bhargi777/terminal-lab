@@ -1,48 +1,48 @@
 #!/usr/bin/env zsh
-# bhargi — personal terminal command center.
+# termlab — personal terminal command center.
 #
 # Usage:
-#   bhargi                launch the interactive menu
-#   bhargi <module> [...] run a module command directly, e.g. `bhargi system info`
-#   bhargi --help          list modules
+#   termlab                launch the interactive menu
+#   termlab <module> [...] run a module command directly, e.g. `termlab system info`
+#   termlab --help          list modules
 #
-# BHARGI_ACTIVE guards against relaunching the menu from inside itself
+# TERMLAB_ACTIVE guards against relaunching the menu from inside itself
 # (see the "T -> Terminal" option and shell/zsh/init.zsh's startup hook).
 
 set -o pipefail
 
-BHARGI_HOME="${BHARGI_HOME:-$(cd "$(dirname "${0:A}")/.." && pwd)}"
-export BHARGI_HOME
-export BHARGI_ACTIVE=1
+TERMLAB_HOME="${TERMLAB_HOME:-$(cd "$(dirname "${0:A}")/.." && pwd)}"
+export TERMLAB_HOME
+export TERMLAB_ACTIVE=1
 
-source "$BHARGI_HOME/shell/functions/config.zsh"
+source "$TERMLAB_HOME/shell/functions/config.zsh"
 
-theme_file="$BHARGI_HOME/themes/${BHARGI_THEME:-default}.zsh"
-[ -f "$theme_file" ] || theme_file="$BHARGI_HOME/themes/default.zsh"
+theme_file="$TERMLAB_HOME/themes/${TERMLAB_THEME:-default}.zsh"
+[ -f "$theme_file" ] || theme_file="$TERMLAB_HOME/themes/default.zsh"
 source "$theme_file"
 
-source "$BHARGI_HOME/cli/lib/platform.zsh"
-source "$BHARGI_HOME/cli/lib/menu.zsh"
-source "$BHARGI_HOME/cli/lib/modules.zsh"
+source "$TERMLAB_HOME/cli/lib/platform.zsh"
+source "$TERMLAB_HOME/cli/lib/menu.zsh"
+source "$TERMLAB_HOME/cli/lib/modules.zsh"
 
 main() {
     if [ $# -eq 0 ]; then
-        bhargi_menu
+        termlab_menu
         return $?
     fi
 
     case "$1" in
         -h|--help|help)
-            bhargi_print_help
+            termlab_print_help
             ;;
         T|t|terminal|Terminal)
-            bhargi_go_to_terminal
+            termlab_go_to_terminal
             ;;
         platform)
-            bhargi_platform_summary
+            termlab_platform_summary
             ;;
         *)
-            bhargi_dispatch "$@"
+            termlab_dispatch "$@"
             ;;
     esac
 }

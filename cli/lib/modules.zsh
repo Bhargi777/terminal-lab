@@ -1,47 +1,47 @@
-# Module registry and dispatch for the bhargi CLI.
+# Module registry and dispatch for the termlab CLI.
 # Each module is a standalone executable at commands/<name>/<name>.zsh
 # that takes its own subcommands and prints help with no arguments.
 
-typeset -ga BHARGI_MODULES=(system network filesystem processes git python packages homebrew macos linux utilities)
+typeset -ga TERMLAB_MODULES=(system network filesystem processes git python packages homebrew macos linux utilities)
 
-bhargi_module_path() {
-    echo "$BHARGI_HOME/commands/$1/$1.zsh"
+termlab_module_path() {
+    echo "$TERMLAB_HOME/commands/$1/$1.zsh"
 }
 
-bhargi_dispatch() {
+termlab_dispatch() {
     local mod="$1"; shift
     local script
-    script="$(bhargi_module_path "$mod")"
+    script="$(termlab_module_path "$mod")"
 
     if [ ! -x "$script" ]; then
         echo "Unknown module: $mod" >&2
-        bhargi_print_help
+        termlab_print_help
         return 1
     fi
 
     "$script" "$@"
 }
 
-bhargi_print_help() {
+termlab_print_help() {
     cat <<EOF
-bhargi — personal terminal command center
+termlab — personal terminal command center
 
 Usage:
-  bhargi                launch the interactive menu
-  bhargi <module> [...] run a module directly
-  bhargi platform        show detected OS/platform
-  bhargi T               drop into a normal shell
-  bhargi --help          show this help
+  termlab                launch the interactive menu
+  termlab <module> [...] run a module directly
+  termlab platform        show detected OS/platform
+  termlab T               drop into a normal shell
+  termlab --help          show this help
 
 Modules:
 EOF
-    for m in "${BHARGI_MODULES[@]}"; do
+    for m in "${TERMLAB_MODULES[@]}"; do
         printf "  %s\n" "$m"
     done
 }
 
-bhargi_go_to_terminal() {
-    echo "Dropping to shell. Run 'bhargi' any time to reopen the menu."
-    unset BHARGI_ACTIVE
+termlab_go_to_terminal() {
+    echo "Dropping to shell. Run 'termlab' any time to reopen the menu."
+    unset TERMLAB_ACTIVE
     exec "${SHELL:-/bin/zsh}" -l
 }
