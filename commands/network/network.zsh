@@ -2,18 +2,31 @@
 # bhargi network — networking diagnostics.
 # Avoids hardcoding unreliable third-party services beyond a well-known
 # public-IP endpoint, and only calls it for the "ip" subcommand.
+#
+# ifconfig/netstat (net-tools) are legacy on Linux and often missing from
+# minimal distros; ip/ss (iproute2) are the modern standard there. macOS
+# still ships BSD ifconfig/netstat as the primary tools, so both paths are
+# tried in tool-availability order rather than hardcoding one per OS.
 
 set -o pipefail
 
 cmd_overview() {
     echo "Local interfaces:"
-    ifconfig | awk '
-        /^[a-z]/ {iface=$1; sub(":", "", iface)}
-        /inet / && iface !~ /^lo/ {print "  " iface ": " $2}
-    '
+    if command -v ip >/dev/null 2>&1; then
+        ip -brief addr show 2>/dev/null | awk '$1 !~ /^lo/ {print "  " $1 ": " $3}'
+    else
+        ifconfig | awk '
+            /^[a-z]/ {iface=$1; sub(":", "", iface)}
+            /inet / && iface !~ /^lo/ {print "  " iface ": " $2}
+        '
+    fi
     echo
     echo "Default route:"
-    netstat -rn 2>/dev/null | awk '/^default/ {print "  " $2 " via " $6}' | head -2
+    if command -v ip >/dev/null 2>&1; then
+        ip route show default 2>/dev/null | awk '{print "  " $3 " via " $5}' | head -2
+    else
+        netstat -rn 2>/dev/null | awk '/^default/ {print "  " $2 " via " $6}' | head -2
+    fi
 }
 
 cmd_ping() {
@@ -34,7 +47,14 @@ cmd_dns() {
 
 cmd_ports() {
     echo "Listening TCP/UDP ports (requires sudo for full process detail):"
-    lsof -iTCP -sTCP:LISTEN -n -P 2>/dev/null
+    if command -v ss >/dev/null 2>&1; then
+        ss -tulnp 2>/dev/null
+    elif command -v lsof >/dev/null 2>&1; then
+        lsof -iTCP -sTCP:LISTEN -n -P 2>/dev/null
+    else
+        echo "Neither ss nor lsof found." >&2
+        return 1
+    fi
 }
 
 cmd_http() {
