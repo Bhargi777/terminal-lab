@@ -1,5 +1,5 @@
 #!/usr/bin/env zsh
-# bhargi processes — process inspection. Anything that can terminate a
+# termlab processes — process inspection. Anything that can terminate a
 # process requires an explicit typed confirmation; nothing here kills
 # silently.
 #
@@ -10,9 +10,9 @@
 
 set -o pipefail
 
-BHARGI_HOME="${BHARGI_HOME:-$(cd "$(dirname "${0:A}")/../.." && pwd)}"
-[ -f "$BHARGI_HOME/cli/lib/platform.zsh" ] && source "$BHARGI_HOME/cli/lib/platform.zsh"
-BHARGI_PLATFORM="${BHARGI_PLATFORM:-$(uname -s | tr '[:upper:]' '[:lower:]')}"
+TERMLAB_HOME="${TERMLAB_HOME:-$(cd "$(dirname "${0:A}")/../.." && pwd)}"
+[ -f "$TERMLAB_HOME/cli/lib/platform.zsh" ] && source "$TERMLAB_HOME/cli/lib/platform.zsh"
+TERMLAB_PLATFORM="${TERMLAB_PLATFORM:-$(uname -s | tr '[:upper:]' '[:lower:]')}"
 
 cmd_top() {
     local n="${1:-10}"
@@ -20,7 +20,7 @@ cmd_top() {
     # head closes the pipe early, which sends ps a SIGPIPE (exit 141);
     # that's expected truncation, not a real failure, so pipefail is
     # suspended just for this pipeline.
-    if [ "$BHARGI_PLATFORM" = "linux" ] || [ "$BHARGI_PLATFORM" = "wsl" ]; then
+    if [ "$TERMLAB_PLATFORM" = "linux" ] || [ "$TERMLAB_PLATFORM" = "wsl" ]; then
         ( set +o pipefail; ps -eo pid,ppid,pcpu,pmem,comm --sort=-pcpu | head -n $((n + 1)) )
     else
         ( set +o pipefail; ps -Ao pid,ppid,pcpu,pmem,comm -r | head -n $((n + 1)) )
@@ -30,7 +30,7 @@ cmd_top() {
 cmd_mem() {
     local n="${1:-10}"
     echo "Top $n processes by memory:"
-    if [ "$BHARGI_PLATFORM" = "linux" ] || [ "$BHARGI_PLATFORM" = "wsl" ]; then
+    if [ "$TERMLAB_PLATFORM" = "linux" ] || [ "$TERMLAB_PLATFORM" = "wsl" ]; then
         ( set +o pipefail; ps -eo pid,ppid,pcpu,pmem,comm --sort=-pmem | head -n $((n + 1)) )
     else
         ( set +o pipefail; ps -Ao pid,ppid,pcpu,pmem,comm -m | head -n $((n + 1)) )
@@ -45,7 +45,7 @@ cmd_ports() {
 cmd_kill() {
     local pid="$1"
     if [ -z "$pid" ]; then
-        echo "Usage: bhargi processes kill <pid> [signal]" >&2
+        echo "Usage: termlab processes kill <pid> [signal]" >&2
         return 1
     fi
     local sig="${2:-TERM}"
@@ -72,7 +72,7 @@ case "${1:-top}" in
     kill)  shift; cmd_kill "$@" ;;
     -h|--help|help)
         cat <<EOF
-bhargi processes [subcommand]
+termlab processes [subcommand]
   top [n] (default)   top n processes by CPU (default 10)
   mem [n]             top n processes by memory
   ports               processes with open network connections

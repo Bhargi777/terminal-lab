@@ -1,5 +1,5 @@
 #!/usr/bin/env pwsh
-# bhargi system (Windows) - system information via native cmdlets/CIM,
+# termlab system (Windows) - system information via native cmdlets/CIM,
 # no external tools required.
 
 param([string]$Sub = "info", [string[]]$Rest)
@@ -61,7 +61,7 @@ switch ($Sub) {
     "disk"    { Show-Disk }
     "uptime"  { Show-Uptime }
     { $_ -in "-h", "--help", "help" } {
-        Write-Host "bhargi system [subcommand]"
+        Write-Host "termlab system [subcommand]"
         Write-Host "  info (default)   OS, model, CPU, memory summary"
         Write-Host "  battery          battery charge and status"
         Write-Host "  memory           memory usage breakdown"

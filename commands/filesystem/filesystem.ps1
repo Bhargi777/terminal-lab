@@ -1,5 +1,5 @@
 #!/usr/bin/env pwsh
-# bhargi filesystem (Windows) - inspection only, no deletion commands.
+# termlab filesystem (Windows) - inspection only, no deletion commands.
 
 param([string]$Sub = "summary", [string[]]$Rest)
 
@@ -22,14 +22,14 @@ function Show-Large {
 
 function Search-Files {
     param([string]$Pattern, [string]$Dir = ".")
-    if (-not $Pattern) { Write-Error "Usage: bhargi filesystem search <pattern> [dir]"; return }
+    if (-not $Pattern) { Write-Error "Usage: termlab filesystem search <pattern> [dir]"; return }
     Get-ChildItem -Path $Dir -Recurse -Filter "*$Pattern*" -ErrorAction SilentlyContinue |
         Select-Object FullName
 }
 
 function Show-Info {
     param([string]$Target)
-    if (-not $Target) { Write-Error "Usage: bhargi filesystem info <path>"; return }
+    if (-not $Target) { Write-Error "Usage: termlab filesystem info <path>"; return }
     if (-not (Test-Path $Target)) { Write-Error "No such file or directory: $Target"; return }
     Get-Item $Target -Force | Format-List Name, FullName, Length, Mode, LastWriteTime, LinkType, Target
 }
@@ -40,7 +40,7 @@ switch ($Sub) {
     "search"  { Search-Files -Pattern ($Rest[0]) -Dir ($Rest[1] ?? ".") }
     "info"    { Show-Info -Target ($Rest[0]) }
     { $_ -in "-h", "--help", "help" } {
-        Write-Host "bhargi filesystem [subcommand]"
+        Write-Host "termlab filesystem [subcommand]"
         Write-Host "  summary (default)      current directory listing"
         Write-Host "  large [dir] [n]        n largest files"
         Write-Host "  search <pattern> [dir] find files by name"

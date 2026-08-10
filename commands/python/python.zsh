@@ -1,14 +1,14 @@
 #!/usr/bin/env zsh
-# bhargi python — Python environment helpers.
+# termlab python — Python environment helpers.
 
 set -o pipefail
 
-_bhargi_py() {
+_termlab_py() {
     command -v python3 >/dev/null 2>&1 && echo python3 || { echo "python3 not found" >&2; return 1; }
 }
 
 cmd_info() {
-    local py; py="$(_bhargi_py)" || return 1
+    local py; py="$(_termlab_py)" || return 1
     echo "Python  : $($py --version 2>&1)"
     echo "Path    : $(command -v "$py")"
     echo "Pip     : $($py -m pip --version 2>/dev/null || echo 'not available')"
@@ -22,7 +22,7 @@ cmd_info() {
 }
 
 cmd_venv() {
-    local py; py="$(_bhargi_py)" || return 1
+    local py; py="$(_termlab_py)" || return 1
     if [ -d .venv ]; then
         echo ".venv already exists in $(pwd)"
     else
@@ -31,14 +31,14 @@ cmd_venv() {
 }
 
 cmd_packages() {
-    local py; py="$(_bhargi_py)" || return 1
+    local py; py="$(_termlab_py)" || return 1
     "$py" -m pip list 2>/dev/null
 }
 
 cmd_project() {
     local name="$1"
     if [ -z "$name" ]; then
-        echo "Usage: bhargi python project <name>" >&2
+        echo "Usage: termlab python project <name>" >&2
         return 1
     fi
     if [ -e "$name" ]; then
@@ -46,11 +46,11 @@ cmd_project() {
         return 1
     fi
     mkdir -p "$name" && cd "$name" || return 1
-    local py; py="$(_bhargi_py)" || return 1
+    local py; py="$(_termlab_py)" || return 1
     "$py" -m venv .venv
     cat > main.py <<'EOF'
 def main():
-    print("hello from bhargi python project")
+    print("hello from termlab python project")
 
 
 if __name__ == "__main__":
@@ -68,7 +68,7 @@ case "${1:-info}" in
     project)  shift; cmd_project "$@" ;;
     -h|--help|help)
         cat <<EOF
-bhargi python [subcommand]
+termlab python [subcommand]
   info (default)   interpreter, pip, and venv status
   venv             create .venv in the current directory
   packages         list installed packages (pip list)

@@ -1,10 +1,10 @@
 #!/usr/bin/env zsh
-# bhargi homebrew — read-only by default. "upgrade" is the only mutating
+# termlab homebrew — read-only by default. "upgrade" is the only mutating
 # subcommand and always asks for confirmation first.
 
 set -o pipefail
 
-_bhargi_require_brew() {
+_termlab_require_brew() {
     command -v brew >/dev/null 2>&1 || {
         echo "Homebrew not installed (https://brew.sh)" >&2
         return 1
@@ -12,29 +12,29 @@ _bhargi_require_brew() {
 }
 
 cmd_info() {
-    _bhargi_require_brew || return 1
+    _termlab_require_brew || return 1
     brew --version
     echo "Prefix   : $(brew --prefix)"
     echo "Packages : $(brew list --formula 2>/dev/null | wc -l | tr -d ' ') formulae, $(brew list --cask 2>/dev/null | wc -l | tr -d ' ') casks"
 }
 
 cmd_list() {
-    _bhargi_require_brew || return 1
+    _termlab_require_brew || return 1
     brew list --formula
 }
 
 cmd_outdated() {
-    _bhargi_require_brew || return 1
+    _termlab_require_brew || return 1
     brew outdated
 }
 
 cmd_update() {
-    _bhargi_require_brew || return 1
+    _termlab_require_brew || return 1
     brew update
 }
 
 cmd_upgrade() {
-    _bhargi_require_brew || return 1
+    _termlab_require_brew || return 1
     echo "Outdated packages:"
     brew outdated
     printf "Upgrade all of the above? Type 'yes' to confirm: "
@@ -54,7 +54,7 @@ case "${1:-info}" in
     upgrade)  cmd_upgrade ;;
     -h|--help|help)
         cat <<EOF
-bhargi homebrew [subcommand]
+termlab homebrew [subcommand]
   info (default)   brew version + package counts
   list             installed formulae
   outdated         outdated packages

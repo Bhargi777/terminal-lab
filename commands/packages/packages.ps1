@@ -1,5 +1,5 @@
 #!/usr/bin/env pwsh
-# bhargi packages (Windows) - detects winget or Chocolatey. "upgrade" is
+# termlab packages (Windows) - detects winget or Chocolatey. "upgrade" is
 # the only mutating subcommand and always requires typed confirmation.
 
 param([string]$Sub = "info", [string[]]$Rest)
@@ -35,7 +35,7 @@ switch ($Sub) {
         if ($pm -eq "winget") { winget upgrade --all } else { choco upgrade all -y }
     }
     { $_ -in "-h", "--help", "help" } {
-        Write-Host "bhargi packages [subcommand]  (detected: $($pm ?? 'none'))"
+        Write-Host "termlab packages [subcommand]  (detected: $($pm ?? 'none'))"
         Write-Host "  info (default)   detected package manager + version"
         Write-Host "  list             installed packages"
         Write-Host "  outdated         packages with available updates"

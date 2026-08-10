@@ -1,14 +1,14 @@
 #!/usr/bin/env zsh
-# bhargi system — system information, branched by platform.
+# termlab system — system information, branched by platform.
 # macOS uses sw_vers/sysctl/pmset; Linux uses /proc and /etc/os-release
 # directly so it works even without free/lscpu (procps/util-linux), only
 # using those tools as a nicer-formatted option when present.
 
 set -o pipefail
 
-BHARGI_HOME="${BHARGI_HOME:-$(cd "$(dirname "${0:A}")/../.." && pwd)}"
-[ -f "$BHARGI_HOME/cli/lib/platform.zsh" ] && source "$BHARGI_HOME/cli/lib/platform.zsh"
-BHARGI_PLATFORM="${BHARGI_PLATFORM:-$(uname -s | tr '[:upper:]' '[:lower:]')}"
+TERMLAB_HOME="${TERMLAB_HOME:-$(cd "$(dirname "${0:A}")/../.." && pwd)}"
+[ -f "$TERMLAB_HOME/cli/lib/platform.zsh" ] && source "$TERMLAB_HOME/cli/lib/platform.zsh"
+TERMLAB_PLATFORM="${TERMLAB_PLATFORM:-$(uname -s | tr '[:upper:]' '[:lower:]')}"
 
 # ---- macOS ----
 
@@ -74,7 +74,7 @@ linux_info() {
     echo "User       : $(whoami)"
     echo "Shell      : $SHELL"
     echo "Uptime     : $(uptime -p 2>/dev/null || uptime)"
-    [ "$BHARGI_PLATFORM" = "wsl" ] && echo "Note       : running under WSL (${WSL_DISTRO_NAME:-unknown distro})"
+    [ "$TERMLAB_PLATFORM" = "wsl" ] && echo "Note       : running under WSL (${WSL_DISTRO_NAME:-unknown distro})"
 }
 
 linux_battery() {
@@ -104,11 +104,11 @@ linux_uptime() { uptime -p 2>/dev/null || uptime; }
 
 # ---- dispatch ----
 
-case "$BHARGI_PLATFORM" in
+case "$TERMLAB_PLATFORM" in
     macos|darwin) info=mac_info; battery=mac_battery; memory=mac_memory; disk=mac_disk; up=mac_uptime ;;
     linux|wsl)    info=linux_info; battery=linux_battery; memory=linux_memory; disk=linux_disk; up=linux_uptime ;;
     *)
-        echo "Unsupported platform: $BHARGI_PLATFORM (falling back to Linux-style output)" >&2
+        echo "Unsupported platform: $TERMLAB_PLATFORM (falling back to Linux-style output)" >&2
         info=linux_info; battery=linux_battery; memory=linux_memory; disk=linux_disk; up=linux_uptime
         ;;
 esac
@@ -121,7 +121,7 @@ case "${1:-info}" in
     uptime)  "$up" ;;
     -h|--help|help)
         cat <<EOF
-bhargi system [subcommand]   (platform: $BHARGI_PLATFORM)
+termlab system [subcommand]   (platform: $TERMLAB_PLATFORM)
   info (default)   OS version, kernel, model, CPU, memory summary
   battery          battery charge and health
   memory           memory usage breakdown

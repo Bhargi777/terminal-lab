@@ -1,5 +1,5 @@
 #!/usr/bin/env pwsh
-# bhargi network (Windows) - diagnostics via native NetTCPIP/DnsClient
+# termlab network (Windows) - diagnostics via native NetTCPIP/DnsClient
 # cmdlets, no third-party dependency.
 
 param([string]$Sub = "overview", [string[]]$Rest)
@@ -34,7 +34,7 @@ function Show-Ports {
 
 function Invoke-Http {
     param([string]$Url)
-    if (-not $Url) { Write-Error "Usage: bhargi network http <url>"; return }
+    if (-not $Url) { Write-Error "Usage: termlab network http <url>"; return }
     $sw = [System.Diagnostics.Stopwatch]::StartNew()
     $response = Invoke-WebRequest -Uri $Url -UseBasicParsing
     $sw.Stop()
@@ -60,7 +60,7 @@ switch ($Sub) {
     "http"     { Invoke-Http -Url ($Rest[0]) }
     "ip"       { Show-PublicIp }
     { $_ -in "-h", "--help", "help" } {
-        Write-Host "bhargi network [subcommand]"
+        Write-Host "termlab network [subcommand]"
         Write-Host "  overview (default)   interfaces + default route"
         Write-Host "  ping [host]          ping a host"
         Write-Host "  dns [host]           resolve a hostname"

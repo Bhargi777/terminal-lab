@@ -1,5 +1,5 @@
 #!/usr/bin/env zsh
-# bhargi packages — cross-platform package manager detection and safe
+# termlab packages — cross-platform package manager detection and safe
 # read-only operations. Detects whichever manager is actually installed
 # rather than assuming one per OS (a Linux box might have brew too; a Mac
 # might not have Homebrew installed at all).
@@ -11,7 +11,7 @@
 
 set -o pipefail
 
-_bhargi_detect_pm() {
+_termlab_detect_pm() {
     if command -v brew >/dev/null 2>&1; then echo brew
     elif command -v apt >/dev/null 2>&1; then echo apt
     elif command -v dnf >/dev/null 2>&1; then echo dnf
@@ -22,9 +22,9 @@ _bhargi_detect_pm() {
     fi
 }
 
-PM="$(_bhargi_detect_pm)"
+PM="$(_termlab_detect_pm)"
 
-_bhargi_require_pm() {
+_termlab_require_pm() {
     if [ "$PM" = "none" ]; then
         echo "No supported package manager found (brew, apt, dnf, yum, pacman, zypper)." >&2
         return 1
@@ -32,7 +32,7 @@ _bhargi_require_pm() {
 }
 
 cmd_info() {
-    _bhargi_require_pm || return 1
+    _termlab_require_pm || return 1
     echo "Package manager : $PM"
     case "$PM" in
         brew)   brew --version | head -1 ;;
@@ -45,7 +45,7 @@ cmd_info() {
 }
 
 cmd_list() {
-    _bhargi_require_pm || return 1
+    _termlab_require_pm || return 1
     case "$PM" in
         brew)   brew list --formula ;;
         apt)    apt list --installed 2>/dev/null ;;
@@ -57,7 +57,7 @@ cmd_list() {
 }
 
 cmd_outdated() {
-    _bhargi_require_pm || return 1
+    _termlab_require_pm || return 1
     case "$PM" in
         brew)   brew outdated ;;
         apt)    apt list --upgradable 2>/dev/null ;;
@@ -69,7 +69,7 @@ cmd_outdated() {
 }
 
 cmd_upgrade() {
-    _bhargi_require_pm || return 1
+    _termlab_require_pm || return 1
     echo "Outdated packages:"
     cmd_outdated
     printf "Upgrade all of the above using %s? Type 'yes' to confirm: " "$PM"
@@ -95,7 +95,7 @@ case "${1:-info}" in
     upgrade)  cmd_upgrade ;;
     -h|--help|help)
         cat <<EOF
-bhargi packages [subcommand]   (detected: $PM)
+termlab packages [subcommand]   (detected: $PM)
   info (default)   detected package manager + version
   list             installed packages
   outdated         packages with available updates

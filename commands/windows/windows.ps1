@@ -1,5 +1,5 @@
 #!/usr/bin/env pwsh
-# bhargi windows - Windows automation via built-in .NET/COM, no
+# termlab windows - Windows automation via built-in .NET/COM, no
 # third-party modules required. Volume control is intentionally limited:
 # Windows has no built-in cmdlet for absolute volume level (unlike
 # macOS's osascript or Linux's pactl), so this uses SendKeys media-key
@@ -32,13 +32,13 @@ function Invoke-VolumeStep {
 
 function Invoke-Open {
     param([string]$Target)
-    if (-not $Target) { Write-Error "Usage: bhargi windows open <app|url>"; return }
+    if (-not $Target) { Write-Error "Usage: termlab windows open <app|url>"; return }
     Start-Process $Target
 }
 
 function Send-Notification {
-    param([string]$Message, [string]$Title = "bhargi")
-    if (-not $Message) { Write-Error "Usage: bhargi windows notify <message> [title]"; return }
+    param([string]$Message, [string]$Title = "termlab")
+    if (-not $Message) { Write-Error "Usage: termlab windows notify <message> [title]"; return }
     if (Get-Module -ListAvailable -Name BurntToast) {
         Import-Module BurntToast
         New-BurntToastNotification -Text $Title, $Message
@@ -51,7 +51,7 @@ function Send-Notification {
 
 function Invoke-Say {
     param([string]$Text)
-    if (-not $Text) { Write-Error "Usage: bhargi windows say <text>"; return }
+    if (-not $Text) { Write-Error "Usage: termlab windows say <text>"; return }
     Add-Type -AssemblyName System.Speech
     $synth = New-Object System.Speech.Synthesis.SpeechSynthesizer
     $synth.Speak($Text)
@@ -66,11 +66,11 @@ switch ($Sub) {
     "mute"    { Invoke-Mute }
     "volume"  { Invoke-VolumeStep -Direction ($Rest[0]) }
     "open"    { Invoke-Open -Target ($Rest[0]) }
-    "notify"  { Send-Notification -Message ($Rest[0]) -Title ($Rest[1] ?? "bhargi") }
+    "notify"  { Send-Notification -Message ($Rest[0]) -Title ($Rest[1] ?? "termlab") }
     "say"     { Invoke-Say -Text ($Rest -join " ") }
     "settings" { Open-Settings }
     { $_ -in "-h", "--help", "help", $null, "" } {
-        Write-Host "bhargi windows <subcommand>"
+        Write-Host "termlab windows <subcommand>"
         Write-Host "  lock                lock the workstation"
         Write-Host "  mute                toggle mute (media key emulation)"
         Write-Host "  volume up|down      step volume (media key emulation, no absolute level)"

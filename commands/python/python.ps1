@@ -1,5 +1,5 @@
 #!/usr/bin/env pwsh
-# bhargi python (Windows) - the "py" launcher is preferred over a bare
+# termlab python (Windows) - the "py" launcher is preferred over a bare
 # "python" on Windows since it reliably resolves to an installed version;
 # falls back to "python" if "py" isn't on PATH.
 
@@ -44,20 +44,20 @@ switch ($Sub) {
     }
     "project" {
         $name = $Rest[0]
-        if (-not $name) { Write-Error "Usage: bhargi python project <name>"; exit 1 }
+        if (-not $name) { Write-Error "Usage: termlab python project <name>"; exit 1 }
         if (Test-Path $name) { Write-Error "$name already exists"; exit 1 }
         $py = Get-PyCommand
         if (-not $py) { exit 1 }
         New-Item -ItemType Directory -Path $name | Out-Null
         Push-Location $name
         & $py -m venv .venv
-        Set-Content -Path "main.py" -Value "def main():`n    print(""hello from bhargi python project"")`n`n`nif __name__ == ""__main__"":`n    main()`n"
+        Set-Content -Path "main.py" -Value "def main():`n    print(""hello from termlab python project"")`n`n`nif __name__ == ""__main__"":`n    main()`n"
         New-Item -ItemType File -Path "requirements.txt" | Out-Null
         Pop-Location
         Write-Host "Created project '$name' with .venv, main.py, requirements.txt"
     }
     { $_ -in "-h", "--help", "help" } {
-        Write-Host "bhargi python [subcommand]"
+        Write-Host "termlab python [subcommand]"
         Write-Host "  info (default)   interpreter, pip, venv status"
         Write-Host "  venv             create .venv"
         Write-Host "  packages         list installed packages"

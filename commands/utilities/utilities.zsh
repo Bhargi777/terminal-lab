@@ -1,13 +1,13 @@
 #!/usr/bin/env zsh
-# bhargi utilities — grab-bag of the personal .zshrc features that don't
+# termlab utilities — grab-bag of the personal .zshrc features that don't
 # fit a domain module: identity banner, network speed test, matrix rain.
 
 set -o pipefail
-BHARGI_HOME="${BHARGI_HOME:-$(cd "$(dirname "${0:A}")/../.." && pwd)}"
-[ -f "$BHARGI_HOME/shell/functions/config.zsh" ] && source "$BHARGI_HOME/shell/functions/config.zsh"
+TERMLAB_HOME="${TERMLAB_HOME:-$(cd "$(dirname "${0:A}")/../.." && pwd)}"
+[ -f "$TERMLAB_HOME/shell/functions/config.zsh" ] && source "$TERMLAB_HOME/shell/functions/config.zsh"
 
 cmd_whoami() {
-    echo "Name     : ${BHARGI_DISPLAY_NAME:-Anonymous}"
+    echo "Name     : ${TERMLAB_DISPLAY_NAME:-Anonymous}"
     echo "Mac      : $(scutil --get ComputerName 2>/dev/null)"
     echo "User     : $(whoami)"
     echo "Date     : $(date '+%d %B %Y')"
@@ -33,7 +33,7 @@ case "${1:-whoami}" in
     matrix) cmd_matrix ;;
     -h|--help|help)
         cat <<EOF
-bhargi utilities [subcommand]
+termlab utilities [subcommand]
   whoami (default)   identity banner from config, no hardcoded personal data
   speed              network speed test
   matrix             cmatrix rain

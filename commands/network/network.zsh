@@ -1,5 +1,5 @@
 #!/usr/bin/env zsh
-# bhargi network — networking diagnostics.
+# termlab network — networking diagnostics.
 # Avoids hardcoding unreliable third-party services beyond a well-known
 # public-IP endpoint, and only calls it for the "ip" subcommand.
 #
@@ -60,7 +60,7 @@ cmd_ports() {
 cmd_http() {
     local url="$1"
     if [ -z "$url" ]; then
-        echo "Usage: bhargi network http <url>" >&2
+        echo "Usage: termlab network http <url>" >&2
         return 1
     fi
     curl -sS -D - -o /dev/null -w "\nTime total: %{time_total}s\nHTTP status: %{http_code}\n" "$url"
@@ -81,7 +81,7 @@ case "${1:-overview}" in
     ip)       cmd_ip ;;
     -h|--help|help)
         cat <<EOF
-bhargi network [subcommand]
+termlab network [subcommand]
   overview (default)   local interfaces + default route
   ping [host]          ping a host (default 1.1.1.1)
   dns [host]           resolve a hostname (default example.com)

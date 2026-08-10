@@ -1,5 +1,5 @@
 #!/usr/bin/env pwsh
-# bhargi git (Windows) - thin wrapper, same safety rules as the zsh
+# termlab git (Windows) - thin wrapper, same safety rules as the zsh
 # version: cleanup is always a dry run, nothing destructive runs itself.
 
 param([string]$Sub = "status", [string[]]$Rest)
@@ -45,7 +45,7 @@ switch ($Sub) {
         Write-Host "Commits : $(git rev-list --count HEAD)"
     }
     { $_ -in "-h", "--help", "help" } {
-        Write-Host "bhargi git [subcommand]"
+        Write-Host "termlab git [subcommand]"
         Write-Host "  status (default)   short status"
         Write-Host "  log [n]            recent commits"
         Write-Host "  branches           local branches with tracking info"

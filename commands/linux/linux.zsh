@@ -1,5 +1,5 @@
 #!/usr/bin/env zsh
-# bhargi linux — Linux desktop automation, mirroring commands/macos/macos.zsh
+# termlab linux — Linux desktop automation, mirroring commands/macos/macos.zsh
 # for the subset that has a real Linux equivalent. Tools vary a lot across
 # distros/desktop environments, so every action checks for a specific
 # binary and reports clearly when it's missing rather than assuming one
@@ -53,7 +53,7 @@ cmd_unmute() {
 cmd_open() {
     local target="$1"
     if [ -z "$target" ]; then
-        echo "Usage: bhargi linux open <app-or-url>" >&2
+        echo "Usage: termlab linux open <app-or-url>" >&2
         return 1
     fi
     if command -v xdg-open >/dev/null 2>&1; then
@@ -65,9 +65,9 @@ cmd_open() {
 }
 
 cmd_notify() {
-    local message="$1" title="${2:-bhargi}"
+    local message="$1" title="${2:-termlab}"
     if [ -z "$message" ]; then
-        echo "Usage: bhargi linux notify <message> [title]" >&2
+        echo "Usage: termlab linux notify <message> [title]" >&2
         return 1
     fi
     if command -v notify-send >/dev/null 2>&1; then
@@ -80,7 +80,7 @@ cmd_notify() {
 
 cmd_say() {
     if [ -z "$1" ]; then
-        echo "Usage: bhargi linux say <text>" >&2
+        echo "Usage: termlab linux say <text>" >&2
         return 1
     fi
     if command -v spd-say >/dev/null 2>&1; then
@@ -103,7 +103,7 @@ case "${1:-}" in
     say)    shift; cmd_say "$@" ;;
     -h|--help|help|"")
         cat <<EOF
-bhargi linux <subcommand>
+termlab linux <subcommand>
   lock              lock the session (loginctl or xdg-screensaver)
   volume [0-100]    get or set output volume (pactl or amixer)
   mute / unmute     mute/unmute default sink

@@ -1,9 +1,9 @@
 #!/usr/bin/env zsh
-# bhargi macos — macOS automation via native tools (open, osascript, pmset).
+# termlab macos — macOS automation via native tools (open, osascript, pmset).
 
 set -o pipefail
 
-_bhargi_require_osascript() {
+_termlab_require_osascript() {
     command -v osascript >/dev/null 2>&1 || { echo "osascript not found" >&2; return 1; }
 }
 
@@ -13,7 +13,7 @@ cmd_lock() {
 
 cmd_volume() {
     local level="$1"
-    _bhargi_require_osascript || return 1
+    _termlab_require_osascript || return 1
     if [ -z "$level" ]; then
         osascript -e "output volume of (get volume settings)"
         return 0
@@ -22,19 +22,19 @@ cmd_volume() {
 }
 
 cmd_mute() {
-    _bhargi_require_osascript || return 1
+    _termlab_require_osascript || return 1
     osascript -e 'set volume with output muted'
 }
 
 cmd_unmute() {
-    _bhargi_require_osascript || return 1
+    _termlab_require_osascript || return 1
     osascript -e 'set volume without output muted'
 }
 
 cmd_open() {
     local target="$1"
     if [ -z "$target" ]; then
-        echo "Usage: bhargi macos open <app-name-or-url>" >&2
+        echo "Usage: termlab macos open <app-name-or-url>" >&2
         return 1
     fi
     case "$target" in
@@ -45,10 +45,10 @@ cmd_open() {
 
 cmd_notify() {
     local message="$1"
-    local title="${2:-bhargi}"
-    _bhargi_require_osascript || return 1
+    local title="${2:-termlab}"
+    _termlab_require_osascript || return 1
     if [ -z "$message" ]; then
-        echo "Usage: bhargi macos notify <message> [title]" >&2
+        echo "Usage: termlab macos notify <message> [title]" >&2
         return 1
     fi
     osascript -e "display notification \"$message\" with title \"$title\""
@@ -56,7 +56,7 @@ cmd_notify() {
 
 cmd_say() {
     if [ -z "$1" ]; then
-        echo "Usage: bhargi macos say <text>" >&2
+        echo "Usage: termlab macos say <text>" >&2
         return 1
     fi
     say "$@"
@@ -77,7 +77,7 @@ case "${1:-}" in
     settings) cmd_settings ;;
     -h|--help|help|"")
         cat <<EOF
-bhargi macos <subcommand>
+termlab macos <subcommand>
   lock              sleep the display
   volume [0-100]    get or set output volume
   mute / unmute     mute/unmute output audio

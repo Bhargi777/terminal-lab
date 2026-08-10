@@ -1,5 +1,5 @@
 #!/usr/bin/env pwsh
-# bhargi processes (Windows) - inspection + confirmation-guarded kill.
+# termlab processes (Windows) - inspection + confirmation-guarded kill.
 
 param([string]$Sub = "top", [string[]]$Rest)
 
@@ -26,9 +26,9 @@ function Show-Ports {
         Select-Object -First 40 | Format-Table -AutoSize
 }
 
-function Stop-BhargiProcess {
+function Stop-TermlabProcess {
     param([string]$ProcId, [string]$Signal = "Stop")
-    if (-not $ProcId) { Write-Error "Usage: bhargi processes kill <pid>"; return }
+    if (-not $ProcId) { Write-Error "Usage: termlab processes kill <pid>"; return }
 
     $proc = Get-Process -Id $ProcId -ErrorAction SilentlyContinue
     if (-not $proc) { Write-Error "No process with PID $ProcId"; return }
@@ -43,9 +43,9 @@ switch ($Sub) {
     "top"   { Show-Top -Count ([int]($Rest[0] ?? 10)) }
     "mem"   { Show-Mem -Count ([int]($Rest[0] ?? 10)) }
     "ports" { Show-Ports }
-    "kill"  { Stop-BhargiProcess -ProcId ($Rest[0]) }
+    "kill"  { Stop-TermlabProcess -ProcId ($Rest[0]) }
     { $_ -in "-h", "--help", "help" } {
-        Write-Host "bhargi processes [subcommand]"
+        Write-Host "termlab processes [subcommand]"
         Write-Host "  top [n] (default)   top n processes by CPU"
         Write-Host "  mem [n]             top n processes by memory"
         Write-Host "  ports               processes with open TCP connections"
