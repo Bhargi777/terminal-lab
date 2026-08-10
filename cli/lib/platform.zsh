@@ -32,22 +32,38 @@ termlab_linux_distro() {
     fi
 }
 
-termlab_platform_summary() {
-    local plat; plat="$(termlab_detect_platform)"
-    case "$plat" in
-        macos)
-            echo "Platform : macOS $(sw_vers -productVersion 2>/dev/null) ($(uname -m))"
-            ;;
-        linux)
-            echo "Platform : Linux — $(termlab_linux_distro) ($(uname -m))"
-            ;;
-        wsl)
-            echo "Platform : WSL — $(termlab_linux_distro) on Windows ($(uname -m))"
-            ;;
-        *)
-            echo "Platform : unrecognized ($kernel) — commands may not work correctly"
-            ;;
+termlab_platform_os_name() {
+    case "$TERMLAB_PLATFORM" in
+        macos) echo "macOS" ;;
+        linux) echo "Linux" ;;
+        wsl)   echo "Linux" ;;
+        *)     echo "unknown ($(uname -s 2>/dev/null))" ;;
     esac
+}
+
+termlab_platform_version() {
+    case "$TERMLAB_PLATFORM" in
+        macos) sw_vers -productVersion 2>/dev/null ;;
+        linux|wsl) termlab_linux_distro ;;
+        *) echo "unknown" ;;
+    esac
+}
+
+termlab_platform_environment() {
+    case "$TERMLAB_PLATFORM" in
+        wsl) echo "WSL (${WSL_DISTRO_NAME:-unknown distro})" ;;
+        *)   echo "Native" ;;
+    esac
+}
+
+termlab_platform_summary() {
+    echo "Platform"
+    echo "──────────────────────"
+    printf "%-15s %s\n" "OS" "$(termlab_platform_os_name)"
+    printf "%-15s %s\n" "Version" "$(termlab_platform_version)"
+    printf "%-15s %s\n" "Architecture" "$(uname -m 2>/dev/null)"
+    printf "%-15s %s\n" "Shell" "$(basename "${SHELL:-unknown}")"
+    printf "%-15s %s\n" "Environment" "$(termlab_platform_environment)"
 }
 
 export TERMLAB_PLATFORM="$(termlab_detect_platform)"

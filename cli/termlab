@@ -22,6 +22,7 @@ theme_file="$TERMLAB_HOME/themes/${TERMLAB_THEME:-default}.zsh"
 source "$theme_file"
 
 source "$TERMLAB_HOME/cli/lib/platform.zsh"
+source "$TERMLAB_HOME/cli/lib/capabilities.zsh"
 source "$TERMLAB_HOME/cli/lib/menu.zsh"
 source "$TERMLAB_HOME/cli/lib/modules.zsh"
 
@@ -40,6 +41,8 @@ main() {
             ;;
         platform)
             termlab_platform_summary
+            echo
+            termlab_print_capabilities
             ;;
         *)
             termlab_dispatch "$@"
