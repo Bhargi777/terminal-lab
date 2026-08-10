@@ -1,0 +1,10 @@
+#!/usr/bin/env zsh
+# DEPRECATED. `bhargi` was this project's old personal branding; the CLI
+# is now `termlab`. This shim exists only so old installs/aliases/muscle
+# memory don't break outright — it will be removed in a future release.
+# See docs/migration.md.
+
+echo "warning: 'bhargi' is deprecated, use 'termlab' instead (see docs/migration.md)" >&2
+
+DIR="$(cd "$(dirname "${0:A}")" && pwd)"
+exec "$DIR/termlab" "$@"
