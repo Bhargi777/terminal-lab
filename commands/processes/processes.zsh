@@ -2,8 +2,17 @@
 # bhargi processes — process inspection. Anything that can terminate a
 # process requires an explicit typed confirmation; nothing here kills
 # silently.
+#
+# BSD ps (macOS) and GNU ps (Linux) disagree on what -r means: BSD treats
+# it as "sort by CPU", GNU treats it as "running processes only". Sorting
+# needs separate flags per platform to avoid silently returning the wrong
+# process list.
 
 set -o pipefail
+
+BHARGI_HOME="${BHARGI_HOME:-$(cd "$(dirname "${0:A}")/../.." && pwd)}"
+[ -f "$BHARGI_HOME/cli/lib/platform.zsh" ] && source "$BHARGI_HOME/cli/lib/platform.zsh"
+BHARGI_PLATFORM="${BHARGI_PLATFORM:-$(uname -s | tr '[:upper:]' '[:lower:]')}"
 
 cmd_top() {
     local n="${1:-10}"
@@ -11,13 +20,21 @@ cmd_top() {
     # head closes the pipe early, which sends ps a SIGPIPE (exit 141);
     # that's expected truncation, not a real failure, so pipefail is
     # suspended just for this pipeline.
-    ( set +o pipefail; ps -Ao pid,ppid,pcpu,pmem,comm -r | head -n $((n + 1)) )
+    if [ "$BHARGI_PLATFORM" = "linux" ] || [ "$BHARGI_PLATFORM" = "wsl" ]; then
+        ( set +o pipefail; ps -eo pid,ppid,pcpu,pmem,comm --sort=-pcpu | head -n $((n + 1)) )
+    else
+        ( set +o pipefail; ps -Ao pid,ppid,pcpu,pmem,comm -r | head -n $((n + 1)) )
+    fi
 }
 
 cmd_mem() {
     local n="${1:-10}"
     echo "Top $n processes by memory:"
-    ( set +o pipefail; ps -Ao pid,ppid,pcpu,pmem,comm -m | head -n $((n + 1)) )
+    if [ "$BHARGI_PLATFORM" = "linux" ] || [ "$BHARGI_PLATFORM" = "wsl" ]; then
+        ( set +o pipefail; ps -eo pid,ppid,pcpu,pmem,comm --sort=-pmem | head -n $((n + 1)) )
+    else
+        ( set +o pipefail; ps -Ao pid,ppid,pcpu,pmem,comm -m | head -n $((n + 1)) )
+    fi
 }
 
 cmd_ports() {
