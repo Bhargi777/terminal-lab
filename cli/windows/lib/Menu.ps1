@@ -1,15 +1,15 @@
-# Interactive menu for the Windows bhargi CLI. Text-only (no box-drawing
+# Interactive menu for the Windows termlab CLI. Text-only (no box-drawing
 # reliance on a specific font) so it renders correctly in both Windows
 # Terminal and the legacy conhost console.
 
-function Show-BhargiMenu {
-    param([string]$BhargiHome)
+function Show-TermlabMenu {
+    param([string]$TermlabHome)
 
     while ($true) {
         Clear-Host
-        $plat = Get-BhargiPlatform
+        $plat = Get-TermlabPlatform
         Write-Host "================================================"
-        Write-Host "               BHARGI TERMINAL"
+        Write-Host "                  TERMLAB"
         Write-Host "           Personal Command Center"
         Write-Host "   Platform: Windows ($($plat.Arch)) | WT: $($plat.WindowsTerminal)"
         Write-Host "================================================"
@@ -35,18 +35,18 @@ function Show-BhargiMenu {
         $choice = Read-Host "Select"
 
         switch ($choice) {
-            "1" { Invoke-BhargiModule -Name "system" -ModuleArgs @() -BhargiHome $BhargiHome }
-            "2" { Invoke-BhargiModule -Name "system" -ModuleArgs @("battery") -BhargiHome $BhargiHome }
-            "3" { Invoke-BhargiModule -Name "filesystem" -ModuleArgs @() -BhargiHome $BhargiHome }
-            "4" { Invoke-BhargiModule -Name "processes" -ModuleArgs @() -BhargiHome $BhargiHome }
-            "5" { Invoke-BhargiModule -Name "git" -ModuleArgs @() -BhargiHome $BhargiHome }
-            "6" { Invoke-BhargiModule -Name "python" -ModuleArgs @() -BhargiHome $BhargiHome }
-            "7" { Invoke-BhargiModule -Name "packages" -ModuleArgs @() -BhargiHome $BhargiHome }
-            "8" { Invoke-BhargiModule -Name "network" -ModuleArgs @() -BhargiHome $BhargiHome }
-            "9" { Invoke-BhargiModule -Name "windows" -ModuleArgs @() -BhargiHome $BhargiHome }
+            "1" { Invoke-TermlabModule -Name "system" -ModuleArgs @() -TermlabHome $TermlabHome }
+            "2" { Invoke-TermlabModule -Name "system" -ModuleArgs @("battery") -TermlabHome $TermlabHome }
+            "3" { Invoke-TermlabModule -Name "filesystem" -ModuleArgs @() -TermlabHome $TermlabHome }
+            "4" { Invoke-TermlabModule -Name "processes" -ModuleArgs @() -TermlabHome $TermlabHome }
+            "5" { Invoke-TermlabModule -Name "git" -ModuleArgs @() -TermlabHome $TermlabHome }
+            "6" { Invoke-TermlabModule -Name "python" -ModuleArgs @() -TermlabHome $TermlabHome }
+            "7" { Invoke-TermlabModule -Name "packages" -ModuleArgs @() -TermlabHome $TermlabHome }
+            "8" { Invoke-TermlabModule -Name "network" -ModuleArgs @() -TermlabHome $TermlabHome }
+            "9" { Invoke-TermlabModule -Name "windows" -ModuleArgs @() -TermlabHome $TermlabHome }
             { $_ -in "T", "t" } {
-                Write-Host "Dropping to shell. Run './bhargi.ps1' any time to reopen the menu."
-                Remove-Item Env:BHARGI_ACTIVE -ErrorAction SilentlyContinue
+                Write-Host "Dropping to shell. Run './termlab.ps1' any time to reopen the menu."
+                Remove-Item Env:TERMLAB_ACTIVE -ErrorAction SilentlyContinue
                 & pwsh -NoLogo
                 return
             }

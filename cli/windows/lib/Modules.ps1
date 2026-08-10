@@ -1,6 +1,6 @@
-# Platform detection + module registry/dispatch for the Windows bhargi CLI.
+# Platform detection + module registry/dispatch for the Windows termlab CLI.
 
-function Get-BhargiPlatform {
+function Get-TermlabPlatform {
     $isWslAvailable = $null -ne (Get-Command wsl.exe -ErrorAction SilentlyContinue)
     [PSCustomObject]@{
         OS          = "windows"
@@ -12,43 +12,43 @@ function Get-BhargiPlatform {
     }
 }
 
-$script:BhargiModules = @(
+$script:TermlabModules = @(
     "system", "network", "filesystem", "processes",
     "git", "python", "packages", "windows", "utilities"
 )
 
-function Get-BhargiModulePath {
-    param([string]$Name, [string]$BhargiHome)
-    Join-Path $BhargiHome "commands\$Name\$Name.ps1"
+function Get-TermlabModulePath {
+    param([string]$Name, [string]$TermlabHome)
+    Join-Path $TermlabHome "commands\$Name\$Name.ps1"
 }
 
-function Invoke-BhargiModule {
+function Invoke-TermlabModule {
     param(
         [string]$Name,
         [string[]]$ModuleArgs,
-        [string]$BhargiHome
+        [string]$TermlabHome
     )
 
-    $path = Get-BhargiModulePath -Name $Name -BhargiHome $BhargiHome
+    $path = Get-TermlabModulePath -Name $Name -TermlabHome $TermlabHome
     if (-not (Test-Path $path)) {
         Write-Error "Unknown module: $Name"
-        Show-BhargiHelp
+        Show-TermlabHelp
         return
     }
 
     & $path @ModuleArgs
 }
 
-function Show-BhargiHelp {
-    Write-Host "bhargi - personal terminal command center (Windows)"
+function Show-TermlabHelp {
+    Write-Host "termlab - personal terminal command center (Windows)"
     Write-Host ""
     Write-Host "Usage:"
-    Write-Host "  bhargi.ps1                launch the interactive menu"
-    Write-Host "  bhargi.ps1 <module> [...] run a module directly"
-    Write-Host "  bhargi.ps1 platform        show detected platform info"
-    Write-Host "  bhargi.ps1 T               drop into a normal PowerShell prompt"
-    Write-Host "  bhargi.ps1 --help          show this help"
+    Write-Host "  termlab.ps1                launch the interactive menu"
+    Write-Host "  termlab.ps1 <module> [...] run a module directly"
+    Write-Host "  termlab.ps1 platform        show detected platform info"
+    Write-Host "  termlab.ps1 T               drop into a normal PowerShell prompt"
+    Write-Host "  termlab.ps1 --help          show this help"
     Write-Host ""
     Write-Host "Modules:"
-    foreach ($m in $script:BhargiModules) { Write-Host "  $m" }
+    foreach ($m in $script:TermlabModules) { Write-Host "  $m" }
 }
