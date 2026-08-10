@@ -1,0 +1,23 @@
+# Local personal configuration (never commit real values)
+config
+config.local
+.env
+*.env
+
+# OS junk
+.DS_Store
+
+# Editor
+.vscode/
+.idea/
+*.swp
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+
+# Logs / backups created by installer
+*.bak
+*.log
+backups/
