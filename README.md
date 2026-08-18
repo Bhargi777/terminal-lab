@@ -45,8 +45,12 @@ Short version:
 ```
 
 ```powershell
-./install-windows.ps1     # Windows
+./install-windows.ps1     # Windows — run inside PowerShell/pwsh, not cmd.exe
 ```
+
+On Windows, run from cmd.exe instead? Use `install-windows.bat` — it
+relaunches into `pwsh` for you, so you never hit cmd.exe's
+`'.' is not recognized` error from pasting PowerShell-only syntax.
 
 Both back up your existing shell config before touching it, never
 overwrite it silently, and only add startup integration if you opt in.

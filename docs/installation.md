@@ -95,6 +95,12 @@ above apply inside that WSL distro.
 
 ### Install
 
+> **Run these in PowerShell (`pwsh`), not Command Prompt (`cmd.exe`).**
+> `. $PROFILE` is PowerShell-only dot-source syntax — pasted into cmd.exe
+> it fails with `'.' is not recognized as an internal or external
+> command`. If you only have cmd.exe handy, run `install-windows.bat`
+> instead of `install-windows.ps1`; it relaunches into `pwsh` for you.
+
 ```powershell
 git clone https://github.com/<you>/terminal-lab.git
 cd terminal-lab
@@ -116,7 +122,7 @@ Enable auto-launch on new PowerShell sessions:
 ./install-windows.ps1 -EnableStartup
 ```
 
-Then reload your profile:
+Then reload your profile (PowerShell/pwsh, not cmd.exe):
 
 ```powershell
 . $PROFILE
@@ -128,6 +134,8 @@ termlab
 ```powershell
 ./uninstall-windows.ps1
 ```
+
+From cmd.exe, use `uninstall-windows.bat` instead.
 
 Removes only the marked block from `$PROFILE`, with its own backup first.
 
