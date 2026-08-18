@@ -13,7 +13,7 @@ function Show-Summary {
 
 function Show-Large {
     param([string]$Dir = ".", [int]$Count = 10)
-    Write-Host "Top $Count largest files under $Dir:"
+    Write-Host "Top $Count largest files under ${Dir}:"
     Get-ChildItem -Path $Dir -Recurse -File -ErrorAction SilentlyContinue |
         Sort-Object Length -Descending | Select-Object -First $Count |
         Select-Object @{N = "SizeMB"; E = { [math]::Round($_.Length / 1MB, 2) } }, FullName |
