@@ -33,4 +33,4 @@ Set-Content -Path $PROFILE -Value $out
 
 Write-Host "Removed terminal-lab block from $PROFILE."
 Write-Host "The repository itself and its gitignored config file were left in place."
-Write-Host "Reload your profile: . `$PROFILE"
+Write-Host "Reload your profile (in PowerShell/pwsh, not cmd.exe): . `$PROFILE"

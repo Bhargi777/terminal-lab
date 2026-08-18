@@ -76,5 +76,9 @@ if ($profileContent -match [regex]::Escape($MarkBegin)) {
 
 Write-Host ""
 Write-Host "== Done =="
-Write-Host "Try it now:  . `$PROFILE  ;  termlab"
+Write-Host "Try it now (in PowerShell/pwsh, NOT Command Prompt):"
+Write-Host "    . `$PROFILE"
+Write-Host "    termlab"
+Write-Host "(Pasting '. `$PROFILE' into cmd.exe fails with `"'.' is not recognized`" —"
+Write-Host " that command only exists in PowerShell.)"
 Write-Host "Undo:        ./uninstall-windows.ps1"
